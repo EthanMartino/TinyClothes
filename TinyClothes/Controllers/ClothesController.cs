@@ -62,5 +62,31 @@ namespace TinyClothes.Controllers
             //Return same view with error messages
             return View(c);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            Clothing c = await ClothingDB.GetClothingById(id, _context);
+            if (c == null)
+            {
+                // HTTP 404 Not Found
+                return NotFound();
+            }
+
+
+            return View(c);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Clothing c)
+        {
+            if (ModelState.IsValid)
+            {
+                await ClothingDB.Edit(c, _context);
+                ViewData["Message"] = c.Title + " Updated Successfully";
+            }
+
+            return View(c);
+        }
     }
 }
