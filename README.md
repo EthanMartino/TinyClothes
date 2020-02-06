@@ -1,3 +1,5 @@
+![.NET Core](https://github.com/EthanMartino/TinyClothes/workflows/.NET%20Core/badge.svg?branch=master)
+
 # TinyClothes
 TinyClothes is an in class website built using ASP.NET Core MVC. TinyClothes is an eCommerce website designed to allow users to buy Tiny Clothes for 
 their babies, pets, dolls, or whatever they may need Tiny Clothes for. 
