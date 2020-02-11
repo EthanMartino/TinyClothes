@@ -105,8 +105,9 @@ namespace TinyClothes.Controllers
         [ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await ClothingDB.Delete(id, _context);
-            TempData["Message"] = "Clothing Deleted Successfully";
+            Clothing c = await ClothingDB.GetClothingById(id, _context);
+            await ClothingDB.Delete(c, _context);
+            TempData["Message"] = c.Title + " Deleted Successfully";
 
             return RedirectToAction(nameof(ShowAll));
         }
