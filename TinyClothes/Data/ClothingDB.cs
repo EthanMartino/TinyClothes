@@ -93,15 +93,6 @@ namespace TinyClothes.Data
             return c;
         }
 
-        public static async Task Delete(int id, StoreContext context)
-        {
-            Clothing c = await GetClothingById(id, context);
-            if (c != null)
-            {
-                await Delete(c, context);
-            }
-        }
-
         public static async Task Delete(Clothing c, StoreContext context)
         {
             await context.AddAsync(c);
