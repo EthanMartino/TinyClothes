@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TinyClothes.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace TinyClothes
 {
@@ -32,9 +33,17 @@ namespace TinyClothes
         {
            IMvcBuilder builder = services.AddControllersWithViews();
 
+            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            //OR\\
+
+            services.AddHttpContextAccessor();
+
+
             //services.AddDbContext<StoreContext>(ConfigDbContext);
 
             string connection = Configuration.GetConnectionString("ClothesDB");
+
 
             //OR(Lambda Notation)\\
 
@@ -43,6 +52,16 @@ namespace TinyClothes
                     options =>
                     options.UseSqlServer(connection)
                 );
+
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".TinyClothes.Session";
+                options.IdleTimeout = TimeSpan.FromMinutes(20);
+                //Session cookie always gets created even if user does not accept cookie policy 
+                options.Cookie.IsEssential = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,6 +83,8 @@ namespace TinyClothes
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
