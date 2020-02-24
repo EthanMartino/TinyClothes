@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TinyClothes.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace TinyClothes
 {
@@ -32,9 +33,17 @@ namespace TinyClothes
         {
            IMvcBuilder builder = services.AddControllersWithViews();
 
+            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            //OR\\
+
+            services.AddHttpContextAccessor();
+
+
             //services.AddDbContext<StoreContext>(ConfigDbContext);
 
             string connection = Configuration.GetConnectionString("ClothesDB");
+
 
             //OR(Lambda Notation)\\
 
