@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<Clothing>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor http
 
 @{
     ViewData["Title"] = "List Clothing Inventory";
@@ -68,6 +69,8 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ItemId" class="btn btn-primary">Edit</a> 
                 <a asp-action="Delete" asp-route-id="@item.ItemId" class="btn btn-danger">Delete</a>
+                <a asp-action="Add" asp-controller="Cart" class="btn btn-primary" asp-route-id="@item.ItemId" asp-route-prevUrl="@http.HttpContext.Request.Path">Add To Cart</a>
+                @*TODO: Keep page number in previous URL*@
             </td>
         </tr>
 }
