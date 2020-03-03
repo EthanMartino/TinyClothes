@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TinyClothes.Data;
 using TinyClothes.Models;
 
@@ -115,7 +116,32 @@ namespace TinyClothes.Controllers
         [HttpGet]
         public async Task<IActionResult> Search(SearchCriteria search)
         {
-            return View();
+            //Not yet sent to DB
+            IQueryable<Clothing> allClothes =
+                (from c in _context.Clothing
+                 select c);
+
+            if (search.MinPrice.HasValue)
+            {
+                //Adds to allClothes Query
+                allClothes =
+                    (from c in allClothes
+                     where c.Price > search.MinPrice
+                     select c);
+            }
+
+            if (search.MaxPrice.HasValue)
+            {
+                allClothes =
+                    (from c in allClothes
+                     where c.Price < search.MaxPrice
+                     select c);
+            }
+
+
+            search.Results = await allClothes.ToListAsync();
+
+            return View(search);
         }
     }
 }
