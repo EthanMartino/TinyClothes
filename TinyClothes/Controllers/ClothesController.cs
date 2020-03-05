@@ -118,58 +118,18 @@ namespace TinyClothes.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Not yet sent to DB
-                IQueryable<Clothing> allClothes =
-                    (from c in _context.Clothing
-                     select c);
-
-                //Where Price > MaxPrice
-                if (search.MinPrice.HasValue)
+                if (search.IsSearchBeingPerformed())
                 {
-                    //Adds to allClothes Query
-                    allClothes =
-                        (from c in allClothes
-                         where c.Price > search.MinPrice
-                         select c);
-                }
+                    //Not yet sent to DB
+                    search = await ClothingDB.BuildSearchQuery(search, _context);
 
-                //Where Price < MaxPrice
-                if (search.MaxPrice.HasValue)
+                    return View(search);
+                }
+                else
                 {
-                    allClothes =
-                        (from c in allClothes
-                         where c.Price < search.MaxPrice
-                         select c);
+                    ModelState.AddModelError(string.Empty, "You must search by at least one criteria");
+                    return View(search);
                 }
-
-                if (!string.IsNullOrWhiteSpace(search.Size))
-                {
-                    allClothes =
-                        (from c in allClothes
-                         where c.Size == search.Size
-                         select c);
-                }
-
-                if (!string.IsNullOrWhiteSpace(search.Type))
-                {
-                    allClothes =
-                        (from c in allClothes
-                         where c.Type == search.Type
-                         select c);
-                }
-
-                if (!string.IsNullOrWhiteSpace(search.Title))
-                {
-                    allClothes =
-                        (from c in allClothes
-                         where c.Title.Contains(search.Title)
-                         select c);
-                }
-
-
-                search.Results = await allClothes.ToListAsync();
-
-                return View(search);
             }
             return View();
         }

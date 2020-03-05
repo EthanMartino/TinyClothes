@@ -99,5 +99,59 @@ namespace TinyClothes.Data
             context.Entry(c).State = EntityState.Deleted;
             await context.SaveChangesAsync();
         }
+
+        public static async Task<SearchCriteria> BuildSearchQuery(SearchCriteria search, StoreContext context)
+        {
+            IQueryable<Clothing> allClothes =
+                (from c in context.Clothing
+                 select c);
+
+            //Where Price > MaxPrice
+            if (search.MinPrice.HasValue)
+            {
+                //Adds to allClothes Query
+                allClothes =
+                    (from c in allClothes
+                     where c.Price > search.MinPrice
+                     select c);
+            }
+
+            //Where Price < MaxPrice
+            if (search.MaxPrice.HasValue)
+            {
+                allClothes =
+                    (from c in allClothes
+                     where c.Price < search.MaxPrice
+                     select c);
+            }
+
+            if (!string.IsNullOrWhiteSpace(search.Size))
+            {
+                allClothes =
+                    (from c in allClothes
+                     where c.Size == search.Size
+                     select c);
+            }
+
+            if (!string.IsNullOrWhiteSpace(search.Type))
+            {
+                allClothes =
+                    (from c in allClothes
+                     where c.Type == search.Type
+                     select c);
+            }
+
+            if (!string.IsNullOrWhiteSpace(search.Title))
+            {
+                allClothes =
+                    (from c in allClothes
+                     where c.Title.Contains(search.Title)
+                     select c);
+            }
+
+
+            search.Results = await allClothes.ToListAsync();
+            return search;
+        }
     }
 }
