@@ -86,6 +86,8 @@ namespace TinyClothes
 
             app.UseSession();
 
+            app.UseStatusCodePagesWithRedirects("/Home/CustomError?code={0}");
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
