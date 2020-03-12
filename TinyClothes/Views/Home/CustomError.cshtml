@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewData["Title"] = "Error!!1";
+}
+
+<h1>Uh-Oh</h1>
+
+@if (ViewData["ErrorMsg"] != null)
+{
+    <h2>@ViewData["ErrorMsg"]</h2>
+}
+else
+{
+    <p>Something Bad Happened. Please Try Again Later.</p>
+}
+<img src="~/images/kyle-glenn-hHCw3V0jg_w-unsplash (1).jpg" height="200" class="img-thumbnail rounded" alt="Guy look at woods" />
