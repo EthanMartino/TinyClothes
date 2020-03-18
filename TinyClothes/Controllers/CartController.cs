@@ -40,11 +40,21 @@ namespace TinyClothes.Controllers
             return Redirect(prevUrl);
         }
 
-        public void AddJS(int id)
+        public async Task<JsonResult> AddJS(int id)
         {
-            //TODO: Get id of clothing
-            //TODO: Add Clothing to cart
+            Clothing c = await ClothingDB.GetClothingById(id, _context);
+
+            if (c == null)
+            {
+                //Return not found message (404)
+            }
+
+            CartHelper.Add(c, _http);
+
             // TODO: Send success response
+            JsonResult result = new JsonResult("Success");
+            result.StatusCode = 200; // Http "Ok" status code
+            return result;
         }
 
         // Summary/checkout page
