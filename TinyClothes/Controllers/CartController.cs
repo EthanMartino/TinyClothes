@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -42,6 +43,7 @@ namespace TinyClothes.Controllers
 
         public async Task<JsonResult> AddJS(int id)
         {
+            //Simulate slowness
             Clothing c = await ClothingDB.GetClothingById(id, _context);
 
             if (c == null)
